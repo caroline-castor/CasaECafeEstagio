@@ -1,7 +1,5 @@
 var app = require('./config/app_config');
 var db = require('./config/db_config');
-var Produtos  = require('./models/product');
-var ProdutoController = require('./controllers/productController');
 var url_routers = require('./routers/routers');
 //configuração rota principal
 app.get('/',function(req,res){
