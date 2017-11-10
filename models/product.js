@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var ProductSchema = new Schema({
     product:String,
-    price:String,
+    price:Number,
     description:String
 });
 //Quando o require acontecer, retornará um model mongoose User com os atributos de UserSchema
