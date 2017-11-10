@@ -10,7 +10,12 @@ exports.save = function(product,price,description,callback){
         if(error){
             callback({error:'Não foi possível salvar'})
         }else{
-            callback(produto);
+            if(product=='' || price=='' || description==''){
+                callback({error:'Não foi possível cadastrar: preencha todos os campos (product,price,description)'})
+            }else{
+                callback(produto)
+            }
+            
         }
     });
 }
@@ -20,7 +25,7 @@ exports.list = function(callback){
         if(error){
             callback({error:'Não foi possivel encontrar produto'});
         }else{
-            callback(produto);
+            callback(produto)
         }
     });
 }
