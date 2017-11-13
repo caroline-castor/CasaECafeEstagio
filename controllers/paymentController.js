@@ -10,9 +10,11 @@ exports.save = function(payment_date, payment_type, product, product_price, disc
         'discount':discount,
         'price':price,
         'transaction_id': transaction_id
+
     }).save(function(error,payment){
+
         if(error){
-            callback({error:'Não foi possível salvar'})
+            callback({error:'Não foi possível salvar'});
         }else{
             callback(payment);
         }
@@ -33,6 +35,7 @@ exports.delete = function(id,callback){
     Payment.findById(id,function(error,payment){
         if(error){
             callback({error:'Não foi possivel excluir'});
+            
         }else{
             payment.remove(function(error){
                 if(!error){

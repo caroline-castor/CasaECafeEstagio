@@ -1,5 +1,7 @@
 var express = require('express');
+var expressValidator = require('express-validator');
 var bodyParser = require('body-parser');
+var util = require('util');
 //define a porta
 var port = '3000';
 
@@ -10,6 +12,8 @@ app.listen(port);
 app.use(bodyParser.urlencoded({extended:true}));
 //receb json também por requisição não só pela URL
 app.use(bodyParser.json());
+app.use(expressValidator());
+
 
 //Controla o acesso a api por outros apps
 app.use(function(req,res,next){

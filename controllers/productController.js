@@ -11,7 +11,7 @@ exports.save = function(product,price,description,callback){
             callback({error:'Não foi possível salvar'})
         }else{
             if(product=='' || price=='' || description==''){
-                callback({error:'Não foi possível cadastrar: preencha todos os campos (product,price,description)'})
+                callback({error:03, msg:'Não foi possível cadastrar: preencha todos os campos (product,price,description)'})
             }else{
                 callback(produto)
             }
