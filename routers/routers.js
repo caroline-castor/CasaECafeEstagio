@@ -3,6 +3,7 @@ var router = express.Router();
 var ProdutoController = require('../controllers/productController');
 var PaymentController = require('../controllers/paymentController');
 var ProdutoModel = require('../models/product');
+var s = require('string');
 
 router.get('/get/payments',function(req,res){
     PaymentController.list(function(resp){
@@ -30,6 +31,9 @@ router.post('/cadastrarPayment',function(req,res){
         if(!err){
             if(product_find!=''){
                 if(product_price){
+                    if(s(product_price).indexOf(",")){
+                        res.json({status:400,msg:"Price is not format XX.X"});                           
+                    }
                     product_price = Number(product_price);
                     if(product_price!= product_find.price){
                         res.json({status:400,msg:"Price is divergent. Please check parameters. Price "+product_find.price});
@@ -39,19 +43,18 @@ router.post('/cadastrarPayment',function(req,res){
                             payment_date = new Date(payment_date);
                             if(payment_type){
                                 if(discount){
-                                    discount=Number(discount);
-                                    discount = discount/100;
-                                    if(discount<=0.5){
-                                        //desconto válido
-                                        if(discount.indexOf(",")){
-                                            res.json({status:400,msg:"Discount is not format XX,X"});   
-                                        }else{
-                                        price = price - (price*discount);
-                                        }
+                                    if(s(discount).indexOf(",")>0){
+                                        res.json({status:400,msg:"Discount is not format XX.X"});   
                                     }else{
-                                        //desconto inválido
-                                        res.json({status:400,msg:"Discount cant be greather 50%."});  
-                            
+                                        discount=Number(discount);
+                                        discount = discount/100;
+                                        if(discount<=0.5){
+                                            //desconto válido
+                                            price = price - (price*discount);
+                                        }else{
+                                            //desconto inválido
+                                            res.json({status:400,msg:"Discount cant be greather 50%."});  
+                                        }
                                     }
                                 }else{
                                     //se discount não foi informado
@@ -71,10 +74,12 @@ router.post('/cadastrarPayment',function(req,res){
                     //se nao foi infomado o preço
                     res.json({status:400,msg:"Price not informed. Please digit product price "});                
                 }
+            
             }else{
                 res.json({status:200,msg:"Product not find, please check parameters"});
             }
-        }
+            }
+    
     });
 
 
