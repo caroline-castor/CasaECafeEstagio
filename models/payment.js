@@ -7,8 +7,7 @@ var PaymentSchema = new Schema({
     product:String,
     product_price:Number,
     discount:Number,
-    price:Number,
-    transaction_id:Number
+    price:Number
 });
 //Quando o require acontecer, retornará um model mongoose User com os atributos de UserSchema
 module.exports = mongoose.model('Payment', PaymentSchema);
