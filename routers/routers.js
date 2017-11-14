@@ -1,39 +1,41 @@
 var express = require('express');
 var router = express.Router();
-var ProdutoController = require('../controllers/productController');
-var PaymentController = require('../controllers/paymentController');
 var ProdutoModel = require('../models/product');
 var PaymentModel = require('../models/payment');
 var s = require('string');
-var isFloat = require('is-float');
-var isInt = require('is-int-nodejs');
 var isNumber = require('is-number');
 
+/*
+    Get de pagamentos (não requerido)
 router.get('/get/payments',function(req,res){
     PaymentController.list(function(resp){
         //passa a resposta como um json
         res.json(resp);
     });
-});
-router.get('/get/plans',function(req,res){
-    ProdutoController.list(function(resp){
-        //passa a resposta como um json
-        res.json(resp);
+});*/
+
+
+router.get('/plans',function(req,res){
+    ProdutoModel.find({},function(err,products){
+        if(err){
+            res.status(500).json({msg:"Error in find products"});
+        }else{
+            res.json(products);
+        }
     });
 });
 
-router.post('/cadastrarPayment',function(req,res){
+router.post('/payments',function(req,res){
     var payment_date = req.body.payment_date;
     var payment_type = req.body.payment_type;
     var product = req.body.product;
     var product_price = req.body.product_price;
     var discount = req.body.discount;
-    var price = req.body.price;
-    var transaction_id = req.body.transaction_id;
+    var price = 0.0;
 
     ProdutoModel.findOne({'product':product},function(err,product_find){
         if(!err){
-            if(product_find!=''){
+            if(product_find!=null){
                 if(product_price){
                     //verifica se o preço está no formato correto
                     if(!isNumber(product_price)){
@@ -47,8 +49,6 @@ router.post('/cadastrarPayment',function(req,res){
                     }else{
                         // se o preço for igual ao informado
                         if(payment_date){
-                            //se payment date não é nulo, converte para data (VERIFICAR)
-                            payment_date = new Date(payment_date);
                             if(payment_type){
                                 //se payment type foi informado
                                 if(discount){
@@ -62,7 +62,7 @@ router.post('/cadastrarPayment',function(req,res){
                                         discount = discount/100;
                                         if(discount<=0.5){
                                             //desconto válido
-                                            price = price - (price*discount);
+                                            price = product_price - (product_price*discount);
                                             // a partir daqui tudo está validado conforme regras de negocio
 
                                             //inserindo no banco de dados
@@ -118,6 +118,8 @@ router.post('/cadastrarPayment',function(req,res){
 
 });
 
+/*
+    Método para cadastro de produtos (não requerido)
 router.post('/cadastrarPlan',function(req,res){
     var product = req.body.product;
     var price = req.body.price;
@@ -127,11 +129,6 @@ router.post('/cadastrarPlan',function(req,res){
     });
 });
 
-/*
-router.delete('/deletar/:id',function(req,res){
-    var id = req.params.id;
-    ProdutoController.delete(id,function(resp){
-        res.json(resp);
-    });
-});*/
+*/
+
 module.exports = router;
