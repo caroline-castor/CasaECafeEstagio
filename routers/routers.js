@@ -59,9 +59,9 @@ router.post('/payments',function(req,res){
                                                 res.status(400).json({error:400,msg:"Transaction_id not informed. Please digit the transaction_id"});  
                                             
                                             }else{
-                                            console.log("transaction id:"+transaction_id);
+                                           
                                             PaymentModel.findOne({'transaction_id':transaction_id},function(err,product_transaction){
-                                                console.log(product_transaction);
+                                     
                                                 if(!err){
                                                     if(product_transaction!=null){
                                                         //erro transaction id já existe
