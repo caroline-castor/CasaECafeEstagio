@@ -20,7 +20,7 @@ app.use(function(req,res,next){
     //permite que qualquer aplicação acesse a api
     res.setHeader('Access-Control-Allow-Origin','*');
     //quais metodos a api fornece para acesso
-    res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,DELETE');
+    res.setHeader('Access-Control-Allow-Methods','GET,POST');
     //acesso por token
     res.setHeader('Access-Control-Allow-Headers','X-Requested-With,content-type,Authorization');
     next();

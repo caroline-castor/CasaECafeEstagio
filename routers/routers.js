@@ -5,15 +5,6 @@ var PaymentModel = require('../models/payment');
 var s = require('string');
 var isNumber = require('is-number');
 
-/*
-    Get de pagamentos (não requerido)
-router.get('/get/payments',function(req,res){
-    PaymentController.list(function(resp){
-        //passa a resposta como um json
-        res.json(resp);
-    });
-});*/
-
 
 router.get('/plans',function(req,res){
     ProdutoModel.find({},function(err,products){
@@ -31,6 +22,7 @@ router.post('/payments',function(req,res){
     var product = req.body.product;
     var product_price = req.body.product_price;
     var discount = req.body.discount;
+    var transaction_id = req.body.transaction_id;
     var price = 0.0;
 
     ProdutoModel.findOne({'product':product},function(err,product_find){
@@ -39,13 +31,13 @@ router.post('/payments',function(req,res){
                 if(product_price){
                     //verifica se o preço está no formato correto
                     if(!isNumber(product_price)){
-                        res.json({status:400,msg:"Price is not format XX.X"});                           
+                        res.status(400).json({error:400,msg:"Price is not in the correct format XX.X"});                           
                     }else{
                     //se o preço está no formato correto converte para number    
                     product_price = Number(product_price);
                     //se o preço informado ao incluir pagamento não é igual ao produto cadastrado
                     if(product_price!= product_find.price){
-                        res.json({status:400,msg:"Price is divergent. Please check parameters. Price "+product_find.price});
+                        res.status(400).json({error:400,msg:"Price informed is divergent. Please check parameters. Price "+product_find.price});
                     }else{
                         // se o preço for igual ao informado
                         if(payment_date){
@@ -55,7 +47,7 @@ router.post('/payments',function(req,res){
                                     //se desconto foi informado
                                     //verifica se o desconto está no formato correto, float
                                     if(!isNumber(discount)){
-                                        res.json({status:400,msg:"Discount is not format XX.X"});   
+                                        res.status(400).json({error:400,msg:"Discount is not in the correct format XX.X"});   
                                     }else{
                                         //se está no formato correto, converte para number
                                         discount=Number(discount);
@@ -63,54 +55,72 @@ router.post('/payments',function(req,res){
                                         if(discount<=0.5){
                                             //desconto válido
                                             price = product_price - (product_price*discount);
-                                            // a partir daqui tudo está validado conforme regras de negocio
+                                            if(!transaction_id){
+                                                res.status(400).json({error:400,msg:"Transaction_id not informed. Please digit the transaction_id"});  
+                                            
+                                            }else{
+                                            console.log("transaction id:"+transaction_id);
+                                            PaymentModel.findOne({'transaction_id':transaction_id},function(err,product_transaction){
+                                                console.log(product_transaction);
+                                                if(!err){
+                                                    if(product_transaction!=null){
+                                                        //erro transaction id já existe
+                                                        res.status(400).json({error:400,msg:"Transaction_id exists. Please digit the transaction_id"});  
+                                                
+                                                    }else{
+                                                        //transaction id não existe, pode inserir
+                                            
+                                                        // a partir daqui tudo está validado conforme regras de negocio
 
-                                            //inserindo no banco de dados
+                                                        //inserindo no banco de dados
 
-                                            var paymentModel = new PaymentModel();
-                                            paymentModel.payment_date = payment_date;
-                                            paymentModel.payment_type = payment_type;
-                                            paymentModel.product = product;
-                                            paymentModel.product_price = product_price;
-                                            paymentModel.discount = discount;
-                                            paymentModel.price = price;
-                                            paymentModel.save(function(err,payment){
-                                                payment.save(function(err,_payment){
-                                                    res.json({_payment});
-                                                });
+                                                        var paymentModel = new PaymentModel();
+                                                        paymentModel.payment_date = payment_date;
+                                                        paymentModel.payment_type = payment_type;
+                                                        paymentModel.product = product;
+                                                        paymentModel.product_price = product_price;
+                                                        paymentModel.discount = discount;
+                                                        paymentModel.price = price;
+                                                        paymentModel.transaction_id = transaction_id;
+                                                        paymentModel.save(function(err,payment){
+                                                            payment.save(function(err,_payment){
+                                                                res.json({_payment});
+                                                            });
+                                                        });
+                                                    }
+                                                }else{
+                                                    res.status(400).json({error:400,msg:"Error in find. Check the connection."});  
+                                                }
                                             });
-
-                                             // PaymentController.save(payment_date, payment_type, product, product_price, discount, price, transaction_id, function(resp){
-                                              //  res.send.json(resp);
-                                             //});
+                                        }
 
                                         }else{
                                             //desconto inválido
-                                            res.json({status:400,msg:"Discount cant be greather 50%."});  
+                                            res.status(400).json({error:400,msg:"Discount cant be greater than 50%"});  
                                         }
                                     }
                                 }else{
                                     //se discount não foi informado
-                                    res.json({status:400,msg:"Discount not informed. Please digit the discount "});  
+                                    res.status(400).json({error:400,msg:"Discount not found. Please enter the discount"});  
                                 }
                             }else{
                                 //se payment type não foi informado
-                                res.json({status:400,msg:"Payment Type not informed. Please digit product price "});  
+                                res.status(400).json({error:400,msg:"Payment Type not found. Please enter the payment_type"});  
                             
                             }
                         }else{
                             // se payment date nao foi informado
-                            res.json({status:400,msg:"Payment Date not informed. Please digit product price "});  
+                            res.status(400).json({error:400,msg:"Payment Date not found. Please enter the payment_date"});  
                         }
                     }
                 }
                 }else{
                     //se nao foi infomado o preço
-                    res.json({status:400,msg:"Price not informed. Please digit product price "});                
+                    res.status(400).json({status:400,msg:"Product Price not found. Please enter the product_price"});                
                 }
             
             }else{
-                res.json({status:200,msg:"Product not find, please check parameters"});
+                res.status(400).json({status:200,msg:"Product not found. Please check the parameters."});
             }
             }
     
@@ -118,17 +128,6 @@ router.post('/payments',function(req,res){
 
 });
 
-/*
-    Método para cadastro de produtos (não requerido)
-router.post('/cadastrarPlan',function(req,res){
-    var product = req.body.product;
-    var price = req.body.price;
-    var description = req.body.description;
-    ProdutoController.save(product,price,description, function(resp){
-        res.json(resp);
-    });
-});
 
-*/
 
 module.exports = router;
