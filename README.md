@@ -65,7 +65,7 @@ Depois de instalar o Postman, basta agora seguir os passos abaixo para testar a 
 |-------------------------|-------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | localhost:3000/plans    | GET         | Agrupa e lista todos os produtos existentes                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | localhost:3000/payments | POST        | Cria um pagamento. Os seguintes parâmetros devem ser passados por body: |
-- payment_data (Dia do Pagamento)  
+- payment_date (Dia do Pagamento)  
 - payment_type (Tipo do Pagamento, exemplo: cartão, dinheiro etc..)  -
 - product (Product se refere ao plano (nome do plano), deve estar contido em /plans)  
 - product_price (Preço do Produto (Formato XX.XX )) 
