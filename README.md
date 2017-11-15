@@ -64,7 +64,7 @@ Depois de instalar o Postman, basta agora seguir os passos abaixo para testar a 
 | Rota                    | HTTP (Verb) | Descrição                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 |-------------------------|-------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | localhost:3000/plans    | GET         | Agrupa e lista todos os produtos existentes                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| localhost:3000/payments | POST        | Cria um pagamento. Os seguintes parâmetros devem ser passados por body x-www-form-urlencoded: |
+| localhost:3000/payments | POST        | Cria um pagamento. Os seguintes parâmetros devem ser passados por body com **x-www-form-urlencoded**: |
 - payment_date (Dia do Pagamento)  
 - payment_type (Tipo do Pagamento, exemplo: cartão, dinheiro etc..)  -
 - product (Product se refere ao plano (nome do plano), deve estar contido em /plans)  
@@ -73,7 +73,7 @@ Depois de instalar o Postman, basta agora seguir os passos abaixo para testar a 
 - transaction_id (Id da transação, não aceita repetições) 
 
 > **Observação:** O preço final do produto será calculado através do backend 
-
+> É necessário que o post tenha body de formato **x-www-form-url-encoded** no **postman**
 > Após o request de /payments será retornado um JSON contendo os dados inseridos
 
 
