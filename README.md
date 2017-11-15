@@ -73,7 +73,9 @@ Depois de instalar o Postman, basta agora seguir os passos abaixo para testar a 
 - transaction_id (Id da transação, não aceita repetições) 
 
 > **Observação:** O preço final do produto será calculado através do backend 
+>
 > É necessário que o post tenha body de formato **x-www-form-url-encoded** no **postman**
+>
 > Após o request de /payments será retornado um JSON contendo os dados inseridos
 
 
