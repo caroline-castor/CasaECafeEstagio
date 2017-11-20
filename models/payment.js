@@ -26,11 +26,7 @@ var PaymentSchema = new Schema({
         type:Number,
         required:true
     },
-    transaction_id:{
-        type:Number,
-        required:true,
-        unique:true
-    }
+   //transaction id is auto-created for mongo db _id
 });
 //Quando o require acontecer, retornará um model mongoose User com os atributos de UserSchema
 module.exports = mongoose.model('Payment', PaymentSchema);
