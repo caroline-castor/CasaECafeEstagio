@@ -2,14 +2,11 @@ var express = require('express');
 var expressValidator = require('express-validator');
 var bodyParser = require('body-parser');
 var util = require('util');
-var http = require('http');
-var url = require('url');
 //define a porta
 var port = '3000';
 
 //exportar variavel app para fazer o request e usar em outro arquivo
 var app = module.exports = express();
-
 //Faz o listen da porta no localhost
 app.listen(port);
 app.use(bodyParser.urlencoded({extended:true}));
@@ -17,6 +14,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json({type:'application/*+json'}));
 app.use(bodyParser.raw({type:'application/vnd.custom-type'}));
 app.use(bodyParser.text({type:'text/html'}));
+
 app.use(expressValidator());
 
 
