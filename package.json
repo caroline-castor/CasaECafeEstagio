@@ -1,0 +1,26 @@
+{
+  "name": "casaecafe",
+  "version": "1.0.0",
+  "description": "Estagio 2018",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Caroline Castor",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-validator": "^4.3.0",
+    "http": "0.0.0",
+    "is-float": "^1.0.0",
+    "is-int-nodejs": "^1.0.0",
+    "is-number": "^4.0.0",
+    "mongoose": "^4.13.0",
+    "node-mongo-seeds": "^2.3.1",
+    "nodemon": "^1.12.1",
+    "string": "^3.3.3",
+    "url": "^0.11.0",
+    "util": "^0.10.3"
+  }
+}
