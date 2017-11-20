@@ -17,20 +17,33 @@
            <br> 
    
             <div class="d-flex justify-content-center align-content-center">
+            <div class="thumbnail">
                 <form>
                     <div class="form-group"> 
                         <label for= 'product'> Produto </label>
-                        <select class="form-control" id="exampleFormControlSelect1">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                        <select class="form-control" id="product" value=''>
+                            <option value="" selected disabled hidden> Escolha um produto </option>
+                          <?php
+                                $results = file_get_contents('http://localhost:3000/plans');
+                                $results = json_decode($results);
+                                for($i = 0; $i < count($results); $i++) {
+                                    $product= $results[$i]->{'product'};
+                                    $price = $results[$i]->{'price'};
+                                  
+                                    $nome=str_replace('_',' ',$product);
+                                    $nome = mb_convert_case($nome,MB_CASE_TITLE,'UTF-8');     
+                                    echo '<option>';
+                                    echo $nome;
+                                    echo '</option>';
+                            }
+                          ?>
+                          
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="price">Preço</label>
+                        <input type="text" class="form-control" id="price">
                     </div>
 
                     <div class="form-group">
@@ -43,10 +56,30 @@
                     <input type="date" class="form-control" id="payment_date" placeholder="dd/mm/aaaa">
                     </div>
 
+                    <div class="form-group"> 
+                            <label>Forma de Pagamento</label>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="">
+                            Cartão
+                        </label>
+                        <br>
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="">
+                            Boleto
+                        </label>
+                    </div>
+
+                    </div>
+                    
+
                     <div class="form-group">
                         <label for="price">Total</label>
                     </div>
+
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
                 </form>
+                </div>
             </div>
     
                

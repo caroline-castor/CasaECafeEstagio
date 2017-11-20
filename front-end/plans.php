@@ -32,7 +32,6 @@
                 <tbody>
                     <?php
                             for($i = 0; $i < count($results); $i++) {
-                                #pega cada elemento do array de json e insere no banco
                                 $_id = $results[$i]->{'_id'};
                                 $product= $results[$i]->{'product'};
                                 $price = $results[$i]->{'price'};
