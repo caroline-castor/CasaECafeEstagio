@@ -13,7 +13,7 @@
            function verificaPlano() {
                 var produto_selecionado = document.getElementById("product").value;
                 var preco_produto_selecionado = document.getElementById(produto_selecionado).name;
-                document.getElementById("price").value = preco_produto_selecionado;
+                document.getElementById("product_price").value = preco_produto_selecionado;
             }
 
             function verificaDesconto(){
@@ -30,8 +30,8 @@
             function calculaTotalPagamento(){
                 var desconto_informado = document.getElementById("discount").value;
                 desconto_informado = desconto_informado/100;
-                var preco_informado = document.getElementById("price").value;
-                document.getElementById("totalVenda").value = preco_informado - (preco_informado*desconto_informado);
+                var preco_informado = document.getElementById("product_price").value;
+                document.getElementById("price").value = preco_informado - (preco_informado*desconto_informado);
             }
 
     
@@ -53,10 +53,10 @@
    
             <div class="d-flex justify-content-center align-content-center">
             <div class="thumbnail">
-                <form method="GET">
+                <form action='action.php' method="POST">
                     <div class="form-group"> 
                         <label for= 'product'> Produto </label>
-                        <select class="form-control" id="product" onChange="verificaPlano()" required>
+                        <select class="form-control" id="product" name="product" onChange="verificaPlano()" required>
                             
                           <?php
                                 //faz a busca no resultado do get para preencher o select box do form
@@ -88,18 +88,18 @@
                     ?>
 
                     <div class="form-group">
-                    <label for="price">Preço</label>
-                        <input type="text" class="form-control" id="price" disabled required>
+                    <label for="product_price">Preço</label>
+                        <input type="text" class="form-control" name="product_price" id="product_price" required readonly>
                     </div>
 
                     <div class="form-group">
                     <label for="discount">Desconto</label>
-                    <input type="text" class="form-control" id="discount" required onchange="verificaDesconto()">
+                    <input type="text" class="form-control" id="discount" name="discount" required onchange="verificaDesconto()">
                     </div>
 
                     <div class="form-group">
                     <label for="payment_date">Data do pagamento</label>
-                    <input type="date" class="form-control" id="payment_date" required placeholder="dd/mm/aaaa">
+                    <input type="date" class="form-control" id="payment_date" name="payment_date" required placeholder="dd/mm/aaaa">
                     </div>
 
                     <div class="form-group"> 
@@ -121,7 +121,7 @@
 
                     <div class="form-group">
                         <label for="totalVenda">Total R$: </label>
-                        <input type="text" id="totalVenda" disabled>
+                        <input type="text" class="form-control" id="price" name="price" readonly>
                     </div>
 
                     <button type="submit" class="btn btn-primary" onClick="validaCampos()">Cadastrar</button>
