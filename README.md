@@ -70,9 +70,9 @@ Depois de instalar o Postman, basta agora seguir os passos abaixo para testar a 
 - product (Product se refere ao plano (nome do plano), deve estar contido em /plans)  
 - product_price (Preço do Produto (Formato XX.XX )) 
 - discount (Porcentagem de desconto sobre o preço do produto (Formato XX.XX), não pode ser maior que 50%)  
-- transaction_id (Id da transação, não aceita repetições) 
 
-> **Observação:** O preço final do produto será calculado através do backend 
+
+> **Observação:** O preço final do produto será calculado através do backend, transaction_id é automaticamente atribuído como _id pelo mongoDB sendo único. A ideia inicial, segundo requisito era que esse campo fosse informado no post, porém não vi a necessidade de criar outro id autoincrement no banco e atribui ao id criado pelo mongo db (_id) 
 >
 > É necessário que o post tenha body de formato **x-www-form-url-encoded** no **postman**
 >
