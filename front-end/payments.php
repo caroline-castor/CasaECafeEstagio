@@ -12,7 +12,7 @@
             // Ao clicar no select text do html, atualiza o campo de plano, dispensando o usuário de digitá-lo  
            function verificaPlano() {
                 var produto_selecionado = document.getElementById("product").value;
-                var preco_produto_selecionado = document.getElementById(produto_selecionado).value;
+                var preco_produto_selecionado = document.getElementById(produto_selecionado).name;
                 document.getElementById("price").value = preco_produto_selecionado;
             }
 
@@ -20,10 +20,21 @@
                 var desconto_informado = document.getElementById("discount").value;
                 desconto_informado = desconto_informado/100;
                 if(desconto_informado>0.5){
-
+                    alert("Desconto maior que o permitido");
+                }else{
+                    calculaTotalPagamento();
                 }
 
             }
+
+            function calculaTotalPagamento(){
+                var desconto_informado = document.getElementById("discount").value;
+                desconto_informado = desconto_informado/100;
+                var preco_informado = document.getElementById("price").value;
+                document.getElementById("totalVenda").value = preco_informado - (preco_informado*desconto_informado);
+            }
+
+    
 
             </script>
 
@@ -42,11 +53,11 @@
    
             <div class="d-flex justify-content-center align-content-center">
             <div class="thumbnail">
-                <form>
+                <form method="GET">
                     <div class="form-group"> 
                         <label for= 'product'> Produto </label>
-                        <select class="form-control" id="product" onchange="verificaPlano()">
-
+                        <select class="form-control" id="product" onChange="verificaPlano()" required>
+                            
                           <?php
                                 //faz a busca no resultado do get para preencher o select box do form
                                 for($i = 0; $i < count($results); $i++) {
@@ -60,7 +71,7 @@
                                     echo '</option>';
                             }
                           ?>
-                          
+                            <option selected disabled>-- Selecione--</option>
                         </select>
                     </div>
 
@@ -72,30 +83,30 @@
                                     $price = $results[$i]->{'price'};
                                     $nome=str_replace('_',' ',$product);
                                     $nome = mb_convert_case($nome,MB_CASE_TITLE,'UTF-8');     
-                                    echo '<input type="hidden" id="'.$nome.'" name="'.$nome.'" value="'.$price.'">';
+                                    echo '<input type="hidden" id="'.$nome.'" name="'.$price.'" value="'.$product.'">';
                             }
                     ?>
 
                     <div class="form-group">
                     <label for="price">Preço</label>
-                        <input type="text" class="form-control" id="price">
+                        <input type="text" class="form-control" id="price" disabled required>
                     </div>
 
                     <div class="form-group">
                     <label for="discount">Desconto</label>
-                    <input type="text" class="form-control" id="discount" onchange="verificaDesconto()">
+                    <input type="text" class="form-control" id="discount" required onchange="verificaDesconto()">
                     </div>
 
                     <div class="form-group">
                     <label for="payment_date">Data do pagamento</label>
-                    <input type="date" class="form-control" id="payment_date" placeholder="dd/mm/aaaa">
+                    <input type="date" class="form-control" id="payment_date" required placeholder="dd/mm/aaaa">
                     </div>
 
                     <div class="form-group"> 
                             <label>Forma de Pagamento</label>
                     <div class="radio">
                         <label class="form-check-label">
-                        <input class="form-check-input" name="payment_type" type="radio" value="cartao">
+                        <input class="form-check-input" name="payment_type" type="radio" value="cartao" required>
                             Cartão
                         </label>
                         <br>
@@ -109,10 +120,11 @@
                     
 
                     <div class="form-group">
-                        <label for="price">Total</label>
+                        <label for="totalVenda">Total R$: </label>
+                        <input type="text" id="totalVenda" disabled>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                    <button type="submit" class="btn btn-primary" onClick="validaCampos()">Cadastrar</button>
                 </form>
                 
                 </div>
