@@ -4,10 +4,34 @@
 
 <html>
     <head>
-        <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+        <script>
+            // Ao clicar no select text do html, atualiza o campo de plano, dispensando o usuário de digitá-lo  
+           function verificaPlano() {
+                var produto_selecionado = document.getElementById("product").value;
+                var preco_produto_selecionado = document.getElementById(produto_selecionado).value;
+                document.getElementById("price").value = preco_produto_selecionado;
+            }
+
+            function verificaDesconto(){
+                var desconto_informado = document.getElementById("discount").value;
+                desconto_informado = desconto_informado/100;
+                if(desconto_informado>0.5){
+
+                }
+
+            }
+
+            </script>
+
+        <?php
+            //faz um get na api para obter os planos
+            $results = file_get_contents('http://localhost:3000/plans');
+            $results = json_decode($results);
+        ?>
     </head>
     <body>
     
@@ -21,11 +45,10 @@
                 <form>
                     <div class="form-group"> 
                         <label for= 'product'> Produto </label>
-                        <select class="form-control" id="product" value=''>
-                            <option value="" selected disabled hidden> Escolha um produto </option>
+                        <select class="form-control" id="product" onchange="verificaPlano()">
+
                           <?php
-                                $results = file_get_contents('http://localhost:3000/plans');
-                                $results = json_decode($results);
+                                //faz a busca no resultado do get para preencher o select box do form
                                 for($i = 0; $i < count($results); $i++) {
                                     $product= $results[$i]->{'product'};
                                     $price = $results[$i]->{'price'};
@@ -41,14 +64,26 @@
                         </select>
                     </div>
 
+                    <?php
+                                //cria campos hiddens para os produtos para o campo de preço poder ser atualizado mais facilmente
+                                //sem a necessidade de fazer um nvo get
+                                for($i = 0; $i < count($results); $i++) {
+                                    $product= $results[$i]->{'product'};
+                                    $price = $results[$i]->{'price'};
+                                    $nome=str_replace('_',' ',$product);
+                                    $nome = mb_convert_case($nome,MB_CASE_TITLE,'UTF-8');     
+                                    echo '<input type="hidden" id="'.$nome.'" name="'.$nome.'" value="'.$price.'">';
+                            }
+                    ?>
+
                     <div class="form-group">
-                        <label for="price">Preço</label>
+                    <label for="price">Preço</label>
                         <input type="text" class="form-control" id="price">
                     </div>
 
                     <div class="form-group">
-                    <label for="desconto">Desconto</label>
-                    <input type="text" class="form-control" id="desconto">
+                    <label for="discount">Desconto</label>
+                    <input type="text" class="form-control" id="discount" onchange="verificaDesconto()">
                     </div>
 
                     <div class="form-group">
@@ -58,14 +93,14 @@
 
                     <div class="form-group"> 
                             <label>Forma de Pagamento</label>
-                    <div class="form-check">
+                    <div class="radio">
                         <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" value="">
+                        <input class="form-check-input" name="payment_type" type="radio" value="cartao">
                             Cartão
                         </label>
                         <br>
                         <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" value="">
+                        <input class="form-check-input" name="payment_type" type="radio" value="boleto">
                             Boleto
                         </label>
                     </div>
@@ -79,6 +114,7 @@
 
                     <button type="submit" class="btn btn-primary">Cadastrar</button>
                 </form>
+                
                 </div>
             </div>
     
