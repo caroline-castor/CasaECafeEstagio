@@ -79,6 +79,32 @@ Depois de instalar o Postman, basta agora seguir os passos abaixo para testar a 
 > Após o request de /payments será retornado um JSON contendo os dados inseridos
 
 
+# Executando o Front End da Aplicação
 
+
+Após feitas as configurações acima (iniciando MongoDB e NodeJS e populando o banco), teremos a API rodando em http://localhost:3000/  (Teste se está tudo ok mandando um GET através http://localhost:3000/plans - Deverá aparecer um json com todos os planos (se banco populado))
+
+Agora, podemos executar o front-end da aplicação. 
+Para realizar a segunda etapa foi utilizado:
+
+* PHP  (para consumir a API)
+* HTML
+* Bootstrap
+* JavaScript
+* JQuery
+
+## Executando Localmente
+
+É necessário que se tenha um Servidor Apache. Por exemplo:
+* [Xampp](https://www.apachefriends.org/pt_br/index.html)
+
+>Executando com Xampp:
+>
+>>Após instalação do Xampp, temos duas alternativas:
+>>.
+>>1. Colar o diretório front contido do diretório do projeto em C:/Xampp/htdocs/
+>>2. Ou colar o diretório do projeto todo em C:/Xampp/htdocs
+>>
+> Executar o front-end em um navegador utilizando a URL: http://localhost/front (Se você optou pela opção 1) ou a URL http://localhost/CasaECafeEstagio/front (Se você optou pela opção 2)
 
 
