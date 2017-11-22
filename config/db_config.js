@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 //url de conexão
-var urlString = 'mongodb://localhost/CASAECAFEESTAGIOCAROLINE';
+var urlString = 'mongodb://localhost/CASAECAFECAROLINE';
 //passa a string de conexão com o banco de dados
 mongoose.connect(urlString, function(err,res){
     if(err){

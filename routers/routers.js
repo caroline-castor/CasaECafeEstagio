@@ -67,7 +67,9 @@ router.post('/payments',function(req,res){
                                          paymentModel.price = price;
                                          paymentModel.save(function(err,payment){
                                             payment.save(function(err,_payment){
+                                                if(!err){
                                                 res.json({_payment});
+                                                }
                                             });
                                         });
                                                     

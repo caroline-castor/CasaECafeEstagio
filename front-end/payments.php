@@ -1,5 +1,52 @@
 <?php
     require_once('header.php');
+    
+    // Aqui estou recebendo os dados do post pois estou enviando um request para a mesma página
+    if(!empty($_REQUEST['action'])){
+        //se eu receber o request de cadastra, me comunico com a API para inserir
+    if($_REQUEST['action']=='cadastra'){
+        $payment_date = $_POST['payment_date'];
+        $payment_type=$_POST['payment_type'];
+        $product = $_POST['product'];
+        $product_price = $_POST['product_price'];
+        $discount = $_POST['discount'];
+        
+        //url da api
+        $url = 'http://localhost:3000/payments';
+        $data = array('payment_date' => $payment_date, 'payment_type' => $payment_type, 'product'=>$product, 'product_price'=>$product_price, 'discount'=>$discount);
+    
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query($data)
+            )
+        );
+        $context  = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        if(http_response_code(200)){?>
+            <div class="alert alert-success" role="alert">
+            Pagamento inserido com sucesso
+            </div>
+        <?php
+            }else{
+            ?>
+            <div class="alert alert-danger" role="alert">
+                Ocorreu um erro, tente mais tarde!
+            </div>
+            <?php
+        }
+        if ($result === FALSE) {
+            ?>
+                <div class="alert alert-danger" role="alert">
+                    Ocorreu um erro, tente mais tarde!
+                </div>
+        <?php
+        }
+        
+      
+    }
+}
 ?>
 
 <html>
@@ -15,14 +62,20 @@
                 var preco_produto_selecionado = document.getElementById(produto_selecionado).name;
                 document.getElementById("product_price").value = preco_produto_selecionado;
             }
-
+            //verifica se o desconto é menor que 50% e se é negativo
             function verificaDesconto(){
                 var desconto_informado = document.getElementById("discount").value;
                 desconto_informado = desconto_informado/100;
                 if(desconto_informado>0.5){
                     alert("Desconto maior que o permitido");
+                    document.getElementById("discount").value="";
                 }else{
-                    calculaTotalPagamento();
+                    if(desconto_informado<0){
+                        alert("Desconto não pode ser negativo");
+                        document.getElementById("discount").value="";
+                    }else{
+                        calculaTotalPagamento();
+                    }
                 }
 
             }
@@ -53,7 +106,7 @@
    
             <div class="d-flex justify-content-center align-content-center">
             <div class="thumbnail">
-                <form action='action.php' method="POST">
+                <form action="payments.php?action=cadastra" method="POST">
                     <div class="form-group"> 
                         <label for= 'product'> Produto </label>
                         <select class="form-control" id="product" name="product" onChange="verificaPlano()" required>
@@ -66,7 +119,7 @@
                                   
                                     $nome=str_replace('_',' ',$product);
                                     $nome = mb_convert_case($nome,MB_CASE_TITLE,'UTF-8');     
-                                    echo '<option>';
+                                    echo '<option value="'.$product.'">';
                                     echo $nome;
                                     echo '</option>';
                             }
@@ -83,7 +136,7 @@
                                     $price = $results[$i]->{'price'};
                                     $nome=str_replace('_',' ',$product);
                                     $nome = mb_convert_case($nome,MB_CASE_TITLE,'UTF-8');     
-                                    echo '<input type="hidden" id="'.$nome.'" name="'.$price.'" value="'.$product.'">';
+                                    echo '<input type="hidden" id="'.$product.'" name="'.$price.'" value="'.$product.'">';
                             }
                     ?>
 
